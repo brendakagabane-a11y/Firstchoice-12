@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>First Choice – AI Support Assistant</title>
+<meta name="description" content="AI Support Assistant for First Choice Tents & Aluminium Fabrication" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --brand-blue:#004E89;
+    --brand-orange:#FF6B35;
+    --bg:#f6f8fb;
+    --card:#ffffff;
+    --muted:#6b7280;
+    --text:#0f1724;
+    --radius:16px;
+    --shadow: 0 4px 20px rgba(2,6,23,0.08);
+    --subtle-border: 1px solid #eef2f6;
+    --success:#10b981;
+    --warning:#f59e0b;
+    --error:#ef4444;
+  }
+  [data-theme="dark"]{
+    --bg:#0a0e1a;
+    --card:#121826;
+    --muted:#94a3b8;
+    --text:#e6eef8;
+    --shadow: 0 4px 20px rgba(0,0,0,0.4);
+    --subtle-border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    display:flex;
+    flex-direction:column;
+    transition: background-color 0.3s ease;
+  }
+
+  /* Enhanced Header */
+  #navbar {
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    transition: all 0.3s ease;
+  }
+
+  [data-theme="dark"] #navbar {
+    background: rgba(18, 24, 38, 0.95);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  }
+
+  .nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .logo-image {
+    height: 50px;
+    width: auto;
+    transition: transform 0.3s ease;
+  }
+
+  .logo:hover .logo-image {
+    transform: scale(1.05);
+  }
+
+  .nav-links {
+    display: flex;
+    list-style: none;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .nav-links li a {
+    text-decoration: none;
+    color: var(--text);
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    display: block;
+    white-space: nowrap;
+  }
+
+  .nav-links li a:hover {
+    background: var(--brand-orange);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .nav-links li a.active {
+    background: var(--brand-orange);
+    color: white;
+  }
+
+  .controls {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .ctrl-btn {
+    background: transparent;
+    border: 2px solid var(--text);
+    color: var(--text);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .ctrl-btn:hover {
+    background: var(--brand-orange);
+    border-color: var(--brand-orange);
+    color: white;
+    transform: rotate(15deg) scale(1.1);
+  }
+
+  .ctrl-btn:active {
+    transform: scale(0.95);
+  }
+
+  .mobile-menu {
+    display: none;
+    background: transparent;
+    border: 2px solid var(--text);
+    color: var(--text);
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-menu:hover {
+    background: var(--brand-orange);
+    border-color: var(--brand-orange);
+    color: white;
+  }
+
+  @media (max-width: 1024px) {
+    .nav-links {
+      gap: 0.3rem;
+    }
+
+    .nav-links li a {
+      padding: 0.5rem 0.8rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .nav-container {
+      padding: 1rem;
+    }
+
+    .mobile-menu {
+      display: flex;
+    }
+
+    .nav-links {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      flex-direction: column;
+      padding: 1rem;
+      gap: 0;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    [data-theme="dark"] .nav-links {
+      background: rgba(18, 24, 38, 0.98);
+    }
+
+    .nav-links.active {
+      max-height: 500px;
+      opacity: 1;
+    }
+
+    .nav-links li {
+      width: 100%;
+    }
+
+    .nav-links li a {
+      width: 100%;
+      text-align: left;
+      padding: 0.8rem 1rem;
+      border-radius: 4px;
+    }
+
+    .controls {
+      order: -1;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .logo-image {
+      height: 40px;
+    }
+
+    .ctrl-btn {
+      width: 36px;
+      height: 36px;
+      font-size: 1rem;
+    }
+  }
+
+  /* Layout */
+  .wrap{
+    max-width:1200px;
+    margin:2rem auto;
+    padding:0 1.5rem;
+    flex:1;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:2rem;
+    flex:1;
+    min-height:calc(100vh - 10rem);
+  }
+  @media (max-width:920px){
+    .grid{grid-template-columns:1fr;gap:1.5rem}
+    .left{order:2}
+  }
+
+  /* Enhanced Left Panel */
+  .left{
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:1.5rem;
+    display:flex;
+    flex-direction:column;
+    gap:1.5rem;
+    height:fit-content;
+    position:sticky;
+    top:100px;
+  }
+  .left h3{
+    font-size:1.25rem;
+    color:var(--text);
+    margin-bottom:0.5rem;
+    font-weight:700;
+  }
+  
+  /* Quick Actions with hover effects */
+  .quick-chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.6rem;
+    margin-top:1rem;
+  }
+  .chip{
+    padding:0.6rem 1rem;
+    border-radius:8px;
+    border:1.5px solid transparent;
+    background:linear-gradient(135deg, #f0f4ff 0%, #e6eef8 100%);
+    cursor:pointer;
+    font-weight:600;
+    color:var(--brand-blue);
+    transition:all 0.3s ease;
+    font-size:0.85rem;
+    position:relative;
+    overflow:hidden;
+  }
+  .chip::before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:100%;
+    height:100%;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+    transition:left 0.5s;
+  }
+  .chip:hover::before{left:100%}
+  .chip:hover{
+    background:var(--brand-blue);
+    border-color:var(--brand-blue);
+    color:#fff;
+    transform:translateY(-2px);
+    box-shadow:0 4px 12px rgba(0,78,137,0.3);
+  }
+  [data-theme="dark"] .chip{
+    background:linear-gradient(135deg, var(--card) 0%, #1a2332 100%);
+    color:var(--text);
+  }
+
+  /* Status Indicator */
+  .status-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:0.4rem;
+    padding:0.4rem 0.8rem;
+    background:rgba(16,185,129,0.1);
+    border:1px solid rgba(16,185,129,0.3);
+    border-radius:20px;
+    font-size:0.8rem;
+    font-weight:600;
+    color:var(--success);
+    margin-top:0.5rem;
+  }
+  .status-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--success);
+    animation:pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:0.5;transform:scale(0.9)}
+  }
+
+  /* Contact Card Enhancement */
+  .contact-card{
+    margin-top:auto;
+    padding:1.25rem;
+    background:linear-gradient(135deg, var(--bg) 0%, var(--card) 100%);
+    border-radius:12px;
+    border:var(--subtle-border);
+    box-shadow:0 2px 8px rgba(0,0,0,0.04);
+  }
+  .contact-card h4{
+    margin-bottom:0.8rem;
+    color:var(--text);
+    font-size:1.05rem;
+  }
+  .contact-item{
+    display:flex;
+    align-items:center;
+    gap:0.6rem;
+    margin:0.6rem 0;
+    font-size:0.95rem;
+  }
+  .contact-item a{
+    color:var(--brand-blue);
+    text-decoration:none;
+    transition:color 0.2s;
+  }
+  .contact-item a:hover{color:var(--brand-orange)}
+
+  /* Enhanced Chat Interface */
+  .chat{
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    min-height:600px;
+  }
+  
+  .chat-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:1rem 1.5rem;
+    background:linear-gradient(135deg, var(--brand-blue) 0%, #003d6e 100%);
+    color:#fff;
+  }
+  .chat-head-left{
+    display:flex;
+    gap:1rem;
+    align-items:center;
+  }
+  .avatar-bot{
+    width:48px;
+    height:48px;
+    border-radius:12px;
+    background:rgba(255,255,255,0.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    backdrop-filter:blur(10px);
+    border:2px solid rgba(255,255,255,0.2);
+  }
+  .chat-head-info{flex:1}
+  .chat-head-info h3{font-size:1.1rem;font-weight:700;margin-bottom:2px}
+  .chat-head-info .status{
+    font-size:0.8rem;
+    opacity:0.9;
+    display:flex;
+    align-items:center;
+    gap:0.4rem;
+  }
+
+  /* Messages */
+  .chat-body{
+    padding:1.5rem;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:1.2rem;
+    flex:1;
+    background:var(--bg);
+    scroll-behavior:smooth;
+  }
+  .chat-body::-webkit-scrollbar{width:8px}
+  .chat-body::-webkit-scrollbar-track{background:transparent}
+  .chat-body::-webkit-scrollbar-thumb{
+    background:rgba(0,0,0,0.1);
+    border-radius:4px;
+  }
+  .chat-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,0.2)}
+  
+  .msg{
+    max-width:80%;
+    padding:1rem 1.3rem;
+    border-radius:20px;
+    line-height:1.6;
+    font-size:0.95rem;
+    animation:slideIn 0.3s ease;
+    word-wrap:break-word;
+  }
+  @keyframes slideIn{
+    from{opacity:0;transform:translateY(10px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+  
+  .msg.bot{
+    background:var(--card);
+    border:var(--subtle-border);
+    align-self:flex-start;
+    border-bottom-left-radius:4px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+  }
+  .msg.user{
+    background:linear-gradient(135deg, var(--brand-orange) 0%, #e85a2a 100%);
+    color:#fff;
+    align-self:flex-end;
+    border-bottom-right-radius:4px;
+    box-shadow:0 2px 8px rgba(255,107,53,0.3);
+  }
+  .msg.bot strong{color:var(--brand-blue);font-weight:700}
+  .msg.bot ul{margin:0.5rem 0;padding-left:1.5rem}
+  .msg.bot li{margin:0.3rem 0}
+  .msg a{color:inherit;font-weight:600;text-decoration:underline}
+  .meta{
+    font-size:0.75rem;
+    color:var(--muted);
+    margin-top:0.5rem;
+    opacity:0.7;
+  }
+
+  /* Enhanced Typing Indicator */
+  .typing{
+    display:flex;
+    gap:0.5rem;
+    align-items:center;
+    padding:0.8rem 1.2rem;
+    border-radius:20px;
+    background:var(--card);
+    border:var(--subtle-border);
+    width:fit-content;
+    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+  }
+  .dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#94a3b8;
+    animation:bounce 1.4s infinite ease-in-out;
+  }
+  .dot:nth-child(1){animation-delay:0s}
+  .dot:nth-child(2){animation-delay:0.2s}
+  .dot:nth-child(3){animation-delay:0.4s}
+  @keyframes bounce{
+    0%,80%,100%{transform:translateY(0)}
+    40%{transform:translateY(-8px)}
+  }
+
+  /* Modern Composer */
+  .composer{
+    padding:1.25rem 1.5rem;
+    border-top:var(--subtle-border);
+    background:var(--card);
+    display:flex;
+    gap:0.8rem;
+    align-items:center;
+  }
+  .input-wrap{
+    flex:1;
+    display:flex;
+    gap:0.5rem;
+    align-items:center;
+    background:var(--bg);
+    padding:0.5rem 0.8rem;
+    border-radius:24px;
+    border:2px solid transparent;
+    transition:all 0.3s ease;
+  }
+  .input-wrap:focus-within{
+    border-color:var(--brand-blue);
+    box-shadow:0 0 0 3px rgba(0,78,137,0.1);
+  }
+  .input-wrap input{
+    flex:1;
+    border:0;
+    padding:0.6rem 0.8rem;
+    font-size:0.95rem;
+    outline:none;
+    background:transparent;
+    color:var(--text);
+    font-family:inherit;
+  }
+  .input-wrap input::placeholder{color:var(--muted);opacity:0.7}
+  
+  .icon-btn{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    border:0;
+    background:transparent;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    color:var(--muted);
+    transition:all 0.2s ease;
+  }
+  .icon-btn:hover{
+    color:var(--brand-blue);
+    background:rgba(0,78,137,0.1);
+  }
+  .icon-btn.mic-active{
+    background:var(--brand-orange);
+    color:#fff;
+    animation:micPulse 1s ease-in-out infinite;
+  }
+  @keyframes micPulse{
+    0%,100%{transform:scale(1)}
+    50%{transform:scale(1.1)}
+  }
+  
+  .send{
+    background:linear-gradient(135deg, var(--brand-orange) 0%, #e85a2a 100%);
+    color:#fff;
+    border-radius:50%;
+    padding:0;
+    border:0;
+    cursor:pointer;
+    width:48px;
+    height:48px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    transition:all 0.3s ease;
+    box-shadow:0 4px 12px rgba(255,107,53,0.3);
+  }
+  .send:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 16px rgba(255,107,53,0.4);
+  }
+  .send:active{transform:scale(0.95)}
+  .send:disabled{
+    opacity:0.5;
+    cursor:not-allowed;
+    transform:none;
+  }
+
+  /* Premium WhatsApp FAB */
+  .wa-fab{
+    position:fixed;
+    right:24px;
+    bottom:24px;
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    background:linear-gradient(135deg, #25D366 0%, #20b858 100%);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    box-shadow:0 8px 24px rgba(37,211,102,0.4);
+    z-index:1000;
+    transition:all 0.3s ease;
+    text-decoration:none;
+  }
+  .wa-fab:hover{
+    transform:translateY(-4px) scale(1.05);
+    box-shadow:0 12px 32px rgba(37,211,102,0.5);
+  }
+  .wa-badge{
+    position:absolute;
+    right:-2px;
+    top:-2px;
+    background:#fff;
+    color:#25d366;
+    border-radius:50%;
+    padding:4px 6px;
+    font-size:10px;
+    font-weight:800;
+    box-shadow:0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  /* Toast Notifications */
+  .toast{
+    position:fixed;
+    bottom:100px;
+    right:24px;
+    background:var(--card);
+    border:var(--subtle-border);
+    padding:1rem 1.5rem;
+    border-radius:12px;
+    box-shadow:var(--shadow);
+    z-index:2000;
+    animation:slideInUp 0.3s ease;
+    max-width:320px;
+  }
+  @keyframes slideInUp{
+    from{opacity:0;transform:translateY(20px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+  .toast.success{border-left:4px solid var(--success)}
+  .toast.error{border-left:4px solid var(--error)}
+  .toast.warning{border-left:4px solid var(--warning)}
+
+  /* Footer */
+  footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:0.85rem;
+    padding:2rem 0;
+    margin-top:2rem;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width:768px){
+    .wrap{padding:0 1rem;margin:1rem auto}
+    .grid{gap:1rem}
+    .msg{max-width:90%}
+    .chat{min-height:500px}
+  }
+</style>
+</head>
+<body data-theme="light">
+
+    <header>
+        <nav id="navbar">
+            <div class="nav-container">
+                <a href="index.html" class="logo">
+                    <img src="logo1.png" alt="First Choice & Aluminium Fabrication Logo" class="logo-image">
+                </a>
+                
+                <ul class="nav-links" id="navLinks">
+                   <li><a href="index.html">Home</a></li>
+                   <li><a href="services.html">Services</a></li>
+                   <li><a href="market.html">Marketplace</a></li>
+                   <li><a href="contact.html">Contact</a></li>
+                   
+
+
+                </ul>
+
+                <div class="controls">
+                    <button id="themeToggle" class="ctrl-btn" title="Toggle theme" aria-label="Toggle dark/light theme">🌙</button>
+                    <button id="ttsToggle" class="ctrl-btn" title="Toggle text-to-speech" aria-label="Toggle text-to-speech">🔊</button>
+                </div>
+                
+                <button class="mobile-menu" id="mobileMenu" aria-label="Toggle navigation menu">☰</button>
+            </div>
+        </nav>
+    </header>
+
+  <main class="wrap">
+    <div class="grid">
+      <aside class="left" aria-label="Quick tools and Contact">
+        <div>
+          <h3>👋 Welcome</h3>
+          <div class="small" id="welcomeMsg" style="color:var(--muted);line-height:1.5"></div>
+          <div class="status-badge">
+            <span class="status-dot"></span>
+            AI Assistant Online
+          </div>
+        </div>
+
+        <div>
+          <h4 style="margin-bottom:0.8rem;font-size:1rem;color:var(--text);font-weight:600">Quick Actions</h4>
+          <div class="quick-chips" id="quickChips">
+            <button class="chip" data-msg="Tell me about your tent products">🎪 Tent Products</button>
+            <button class="chip" data-msg="Tell me about aluminium fabrication">🔧 Aluminium Works</button>
+            <button class="chip" data-msg="How much does a wedding tent cost?">💰 Pricing</button>
+            <button class="chip" data-msg="Do you install nationwide?">📍 Installation</button>
+            <button class="chip" data-msg="How long does delivery take?">🚚 Delivery</button>
+            <button class="chip" data-msg="What's your warranty policy?">🛡️ Warranty</button>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <h4>📞 Direct Contact</h4>
+          <div class="contact-item">
+            <span>📱</span>
+            <a href="tel:+256706028299">+256 706 028 299</a>
+          </div>
+          <div class="contact-item">
+            <span>✉️</span>
+            <a href="mailto:firstchoicetents2025@gmail.com">firstchoicetents2025@gmail.com</a>
+          </div>
+          <div style="margin-top:1rem;padding-top:1rem;border-top:var(--subtle-border)">
+            <div style="font-size:0.85rem;color:var(--muted);margin-bottom:0.5rem">Office Hours:</div>
+            <div style="font-size:0.9rem;font-weight:600">Mon-Sat: 8AM - 6PM</div>
+          </div>
+        </div>
+      </aside>
+
+      <section class="chat" aria-label="Support chat">
+        <div class="chat-head">
+          <div class="chat-head-left">
+            <div class="avatar-bot">🤖</div>
+            <div class="chat-head-info">
+              <h3>AI Assistant</h3>
+              <div class="status" id="statusText">
+                <span style="color:var(--success)">●</span>
+                <span>Responds instantly</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-body" id="chatBody" role="log" aria-live="polite" aria-atomic="false"></div>
+
+        <div class="composer" role="form">
+          <div class="input-wrap">
+            <input id="chatInput" placeholder="Type your question..." aria-label="Message input" autocomplete="off">
+            <button id="micBtn" class="icon-btn" title="Voice input" aria-label="Voice input">🎤</button>
+          </div>
+          <button id="sendBtn" class="send" aria-label="Send message">
+            <span>➤</span>
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <a class="wa-fab" href="https://wa.me/256706028299?text=Hello%20First%20Choice!" target="_blank" rel="noopener" aria-label="Contact via WhatsApp">
+      💬
+      <span class="wa-badge"></span>
+    </a>
+  </main>
+
+  <footer>
+    © 2025 First Choice Tents & Aluminium Fabrication – Powered by Fikaconnect AI
+  </footer>
+
+<audio id="sndSend" preload="auto">
+  <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBgoOEhYaHiImKi4yNjo+QkZKTlJWWl5iZmpucnZ6foKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr/AwcLDxMXGx8jJysvMzc7P0NHS09TV1tfY2drb3N3e3+Dh4uPk5ebn" type="audio/wav">
+</audio>
+<audio id="sndRecv" preload="auto">
+  <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACAgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp" type="audio/wav">
+</audio>
+
+<script>
+// Mobile menu functionality
+const mobileMenu = document.getElementById('mobileMenu');
+const navLinks = document.getElementById('navLinks');
+
+mobileMenu.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+    mobileMenu.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+});
+
+navLinks.addEventListener('click', (e) => {
+    if (e.target.tagName === 'A' && window.innerWidth <= 768) {
+        navLinks.classList.remove('active');
+        mobileMenu.textContent = '☰';
+    }
+});
+
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+        navLinks.classList.remove('active');
+        mobileMenu.textContent = '☰';
+    }
+});
+  
+// Enhanced Knowledge Base with better responses
+const knowledgeBase = {
+  tent: {
+    keywords: ['tent','tents','marquee','canopy','wedding tent','event tent','gazebo'],
+    response: `<strong>🎪 Our Tent Solutions</strong>
+      <ul>
+        <li><strong>Event & Wedding Marquees</strong> – Elegant, weather-resistant tents for any celebration</li>
+        <li><strong>Car Parking Shades</strong> – Durable UV-protected parking solutions</li>
+        <li><strong>Storage & Warehouse Tents</strong> – Heavy-duty temporary or permanent storage</li>
+        <li><strong>Custom Sizes Available</strong> – Tailored to your exact specifications</li>
+      </ul>
+      <div class="meta">Starting from UGX 18,000/sq.m • Free site inspection • Installation included</div>`
+  },
+  aluminium: {
+    keywords: ['aluminium','aluminum','doors','windows','partition','shop front','glass'],
+    response: `<strong>🔧 Aluminium Fabrication Services</strong>
+      <ul>
+        <li><strong>Doors & Windows</strong> – Modern frames with superior finish</li>
+        <li><strong>Shop Fronts & Partitions</strong> – Professional commercial installations</li>
+        <li><strong>Custom Frames & Fittings</strong> – Bespoke designs for any project</li>
+        <li><strong>Glass Work</strong> – Expert glass cutting and installation</li>
+      </ul>
+      <div class="meta">From UGX 95,000/sq.m with installation • 5-10 year warranty</div>`
+  },
+  price: {
+    keywords: ['price','cost','how much','pricing','quote','estimate','budget','expensive','cheap','affordable'],
+    response: `<strong>💰 Transparent Pricing</strong>
+      <p>We believe in honest, upfront pricing:</p>
+      <ul>
+        <li><strong>Tents:</strong> Starting UGX 18,000/m² (varies by size & features)</li>
+        <li><strong>Aluminium Works:</strong> Starting UGX 95,000/m² (includes installation)</li>
+        <li><strong>Custom Projects:</strong> Contact us for detailed quotation</li>
+      </ul>
+      <p style="margin-top:0.8rem"><strong>💡 Pro Tip:</strong> Bulk orders and combo packages get special discounts! Share your project details on WhatsApp for an instant estimate.</p>`
+  },
+  warranty: {
+    keywords: ['warranty','guarantee','durability','last','lifespan','maintenance','repair'],
+    response: `<strong>🛡️ Warranty & Quality Assurance</strong>
+      <ul>
+        <li><strong>Tents:</strong> 1-5 years warranty (material dependent)</li>
+        <li><strong>Aluminium Works:</strong> 5-10 years warranty</li>
+        <li><strong>Free Maintenance Tips</strong> – We guide you on care</li>
+        <li><strong>Spare Parts Available</strong> – Quick replacement service</li>
+      </ul>
+      <p style="margin-top:0.5rem">All installations come with a 90-day workmanship guarantee!</p>`
+  },
+  installation: {
+    keywords: ['install','installation','setup','deliver','delivery','shipping','transport','how long'],
+    response: `<strong>📍 Nationwide Installation Services</strong>
+      <p><strong>We deliver and install across Uganda!</strong></p>
+      <ul>
+        <li><strong>Tents:</strong> 1-3 days (includes site prep & testing)</li>
+        <li><strong>Aluminium Works:</strong> 1-3 weeks (depending on complexity)</li>
+        <li><strong>Free Site Inspection</strong> – We assess before quoting</li>
+        <li><strong>Professional Team</strong> – Experienced installers</li>
+      </ul>
+      <div class="meta">Installation included in all quotes • Call for urgent projects</div>`
+  },
+  technical: {
+    keywords: ['technical','engineer','technician','expert','specialist','problem','issue','broken','repair'],
+    response: `<strong>🔧 Technical Support</strong>
+      <p>Need expert technical assistance? Our specialized team is ready to help!</p>
+      <p style="margin-top:1rem"><a href="https://wa.me/256706028299?text=Hello%20First%20Choice%2C%20I%20need%20technical%20support" target="_blank" style="display:inline-block;background:var(--brand-orange);color:#fff;padding:0.6rem 1.2rem;border-radius:8px;text-decoration:none;font-weight:600">💬 Chat with Technical Team</a></p>`
+  },
+  locations: {
+    keywords: ['where','location','address','find you','office','branch','mukono','arua','visit'],
+    response: `<strong>📍 Our Locations</strong>
+      <ul>
+        <li><strong>Mukono (HQ):</strong> Opposite BE Energy Petrol Station<br>📞 +256 706 028 299</li>
+        <li><strong>Arua Branch:</strong> Baluku Cell<br>📞 +256 787 028 099</li>
+      </ul>
+      <p style="margin-top:0.8rem">Visit us during business hours: Mon-Sat, 8AM-6PM</p>`
+  },
+  process: {
+    keywords: ['process','how does it work','steps','procedure','order','buy','purchase'],
+    response: `<strong>📋 Our Simple Process</strong>
+      <ol style="padding-left:1.5rem;margin:0.8rem 0">
+        <li><strong>Consultation:</strong> Share your requirements (size, location, purpose)</li>
+        <li><strong>Site Visit:</strong> Free inspection and measurements</li>
+        <li><strong>Quotation:</strong> Detailed pricing within 24 hours</li>
+        <li><strong>Production:</strong> Custom fabrication (1-2 weeks)</li>
+        <li><strong>Installation:</strong> Professional setup at your site</li>
+        <li><strong>Quality Check:</strong> Final inspection & handover</li>
+      </ol>
+      <p>Ready to start? Contact us on WhatsApp!</p>`
+  },
+  payment: {
+    keywords: ['payment','pay','deposit','installment','cash','mobile money','bank'],
+    response: `<strong>💳 Flexible Payment Options</strong>
+      <ul>
+        <li><strong>Mobile Money:</strong> MTN & Airtel accepted</li>
+        <li><strong>Bank Transfer:</strong> Direct bank deposit</li>
+        <li><strong>Cash:</strong> At our offices</li>
+        <li><strong>Installments:</strong> Available for large projects</li>
+      </ul>
+      <p style="margin-top:0.8rem"><strong>Standard Terms:</strong> 50% deposit, 50% on completion</p>
+      <div class="meta">Flexible payment plans available – discuss with our team</div>`
+  },
+  materials: {
+    keywords: ['material','fabric','quality','type','waterproof','aluminium grade'],
+    response: `<strong>🗂️ Premium Materials</strong>
+      <p><strong>Tents:</strong></p>
+      <ul>
+        <li>Heavy-duty PVC canvas (waterproof & UV-resistant)</li>
+        <li>Galvanized steel frames</li>
+        <li>Fire-retardant options available</li>
+      </ul>
+      <p style="margin-top:0.8rem"><strong>Aluminium:</strong></p>
+      <ul>
+        <li>Grade A aluminium profiles</li>
+        <li>Powder-coated finish (corrosion-resistant)</li>
+        <li>Tempered safety glass</li>
+      </ul>`
+  },
+  default: {
+    keywords: [],
+    response: `<p>👋 I'm here to help! I can assist you with:</p>
+      <ul style="margin:0.8rem 0;padding-left:1.5rem">
+        <li>Tent products & pricing</li>
+        <li>Aluminium fabrication services</li>
+        <li>Installation & delivery</li>
+        <li>Warranties & maintenance</li>
+        <li>Custom project quotes</li>
+      </ul>
+      <p style="margin-top:0.8rem"><strong>Try asking:</strong> <em>"How much does a wedding tent cost?"</em> or click a quick action button!</p>`
+  }
+};
+
+// UI Elements
+const chatBody = document.getElementById('chatBody');
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendBtn');
+const micBtn = document.getElementById('micBtn');
+const themeToggle = document.getElementById('themeToggle');
+const ttsToggle = document.getElementById('ttsToggle');
+const statusText = document.getElementById('statusText');
+const welcomeMsgEl = document.getElementById('welcomeMsg');
+const sndSend = document.getElementById('sndSend');
+const sndRecv = document.getElementById('sndRecv');
+
+// State Management
+let ttsEnabled = localStorage.getItem('fc_tts') === 'true';
+let soundEnabled = localStorage.getItem('fc_sound') !== 'false';
+let userName = localStorage.getItem('fc_name') || '';
+let recognition = null;
+let listening = false;
+let isBotResponding = false;
+let messageHistory = [];
+
+// Greeting by time
+function getTimeGreeting() {
+  const h = new Date().getHours();
+  if (h < 12) return 'Good morning';
+  if (h < 18) return 'Good afternoon';
+  return 'Good evening';
+}
+
+function setWelcome() {
+  const greet = getTimeGreeting();
+  const name = userName ? `, ${userName}` : '';
+  welcomeMsgEl.textContent = `${greet}${name}! I'm your First Choice AI assistant, ready to help you find the perfect tent or aluminium solution.`;
+}
+
+// Message Management
+function appendMessage(html, who = 'bot', meta = '') {
+  const wrap = document.createElement('div');
+  wrap.className = 'msg ' + who;
+  wrap.innerHTML = html + (meta ? `<div class="meta">${meta}</div>` : '');
+  chatBody.appendChild(wrap);
+  chatBody.scrollTop = chatBody.scrollHeight;
+  
+  messageHistory.push({ who, content: html, timestamp: Date.now() });
+  
+  if (who === 'bot' && soundEnabled) {
+    try { sndRecv.play(); } catch(e) {}
+  }
+  if (who === 'user' && soundEnabled) {
+    try { sndSend.play(); } catch(e) {}
+  }
+}
+
+// Enhanced typing indicator
+function showTyping() {
+  if (document.getElementById('typingEl')) return;
+  const t = document.createElement('div');
+  t.id = 'typingEl';
+  t.className = 'msg bot';
+  t.innerHTML = `<div class="typing">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <span style="margin-left:8px;color:var(--muted);font-size:0.85rem">AI is thinking...</span>
+  </div>`;
+  chatBody.appendChild(t);
+  chatBody.scrollTop = chatBody.scrollHeight;
+  statusText.innerHTML = '<span style="color:var(--warning)">●</span> <span>Typing...</span>';
+}
+
+function hideTyping() {
+  const el = document.getElementById('typingEl');
+  if (el) el.remove();
+  statusText.innerHTML = '<span style="color:var(--success)">●</span> <span>Responds instantly</span>';
+}
+
+// Enhanced AI Logic with better matching
+function findBestResponse(input) {
+  input = input.toLowerCase().trim();
+  
+  if (!userName) {
+    const nameMatch = input.match(/(?:my name is|i am|i'm|call me)\s+([a-z]+)/i);
+    if (nameMatch) {
+      userName = nameMatch[1].charAt(0).toUpperCase() + nameMatch[1].slice(1);
+      localStorage.setItem('fc_name', userName);
+      setWelcome();
+      return `<p>Nice to meet you, <strong>${userName}</strong>! 🎉</p><p>How can I help you today? I can provide information about our tents, aluminium works, pricing, and more.</p>`;
+    }
+  }
+  
+  if (/^(hi|hello|hey|good morning|good afternoon|good evening)$/i.test(input)) {
+    const greet = getTimeGreeting();
+    const name = userName ? `, ${userName}` : '';
+    return `<p>${greet}${name}! 👋 Welcome to First Choice!</p><p>I'm here to help you with tents, aluminium fabrication, quotes, and any questions you have. What would you like to know?</p>`;
+  }
+  
+  let best = knowledgeBase.default.response;
+  let bestScore = 0;
+  
+  for (const key in knowledgeBase) {
+    if (key === 'default') continue;
+    const item = knowledgeBase[key];
+    let score = 0;
+    
+    item.keywords.forEach(keyword => {
+      const isPhrase = keyword.includes(' ');
+      if (input.includes(keyword)) {
+        score += isPhrase ? 5 : 2;
+      }
+      const words = input.split(/\s+/);
+      if (words.includes(keyword)) {
+        score += 1;
+      }
+    });
+    
+    if (score > bestScore) {
+      bestScore = score;
+      best = item.response;
+    }
+  }
+  
+  return best;
+}
+
+// Text-to-Speech
+function speak(text) {
+  if (!ttsEnabled) return;
+  try {
+    window.speechSynthesis.cancel();
+    const temp = document.createElement('div');
+    temp.innerHTML = text;
+    const plain = temp.textContent || temp.innerText || '';
+    
+    const utterance = new SpeechSynthesisUtterance(plain);
+    utterance.lang = 'en-GB';
+    utterance.rate = 1.1;
+    utterance.pitch = 1;
+    
+    window.speechSynthesis.speak(utterance);
+  } catch(e) {
+    console.warn('TTS error:', e);
+  }
+}
+
+// Enhanced message handler with better UX
+async function handleSend(rawText) {
+  if (isBotResponding) {
+    showToast('Please wait for the current response to complete', 'warning');
+    return;
+  }
+  
+  const text = rawText.trim();
+  if (!text) return;
+  
+  isBotResponding = true;
+  chatInput.value = '';
+  chatInput.disabled = true;
+  sendBtn.disabled = true;
+  
+  const timestamp = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  appendMessage(escapeHtml(text), 'user', timestamp);
+  
+  showTyping();
+  
+  try {
+    const delay = 600 + Math.random() * 800;
+    await new Promise(resolve => setTimeout(resolve, delay));
+    
+    const reply = findBestResponse(text);
+    
+    hideTyping();
+    appendMessage(reply, 'bot', timestamp);
+    speak(reply);
+    
+  } catch(error) {
+    hideTyping();
+    console.error('Error:', error);
+    appendMessage(
+      '<p>😔 Oops! Something went wrong. Please try again or <a href="https://wa.me/256706028299" target="_blank">contact us directly on WhatsApp</a>.</p>',
+      'bot',
+      timestamp
+    );
+  } finally {
+    isBotResponding = false;
+    chatInput.disabled = false;
+    sendBtn.disabled = false;
+    chatInput.focus();
+  }
+}
+
+// Utility functions
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function showToast(message, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.style.animation = 'slideInUp 0.3s ease reverse';
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+// Event Listeners
+sendBtn.addEventListener('click', () => handleSend(chatInput.value));
+
+chatInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    handleSend(chatInput.value);
+  }
+});
+
+// Quick action chips
+document.querySelectorAll('.chip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const msg = btn.dataset.msg;
+    chatInput.value = msg;
+    handleSend(msg);
+  });
+});
+
+// TTS Toggle
+ttsToggle.addEventListener('click', () => {
+  ttsEnabled = !ttsEnabled;
+  localStorage.setItem('fc_tts', ttsEnabled);
+  ttsToggle.textContent = ttsEnabled ? '🔊' : '🔇';
+  ttsToggle.style.opacity = ttsEnabled ? '1' : '0.6';
+  
+  if (!ttsEnabled) {
+    window.speechSynthesis.cancel();
+  }
+  
+  showToast(`Text-to-speech ${ttsEnabled ? 'enabled' : 'disabled'}`, 'success');
+});
+
+// Theme Toggle
+themeToggle.addEventListener('click', () => {
+  const current = document.body.getAttribute('data-theme') || 'light';
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.body.setAttribute('data-theme', next);
+  themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+  localStorage.setItem('fc_theme', next);
+});
+
+// Speech Recognition
+function initSpeech() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    micBtn.title = 'Voice input not supported';
+    micBtn.style.opacity = '0.5';
+    return false;
+  }
+  
+  if (recognition) return true;
+  
+  recognition = new SpeechRecognition();
+  recognition.lang = 'en-UG';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+  
+  recognition.addEventListener('start', () => {
+    listening = true;
+    micBtn.classList.add('mic-active');
+    statusText.innerHTML = '<span style="color:var(--error)">●</span> <span>Listening...</span>';
+  });
+  
+  recognition.addEventListener('end', () => {
+    listening = false;
+    micBtn.classList.remove('mic-active');
+    statusText.innerHTML = '<span style="color:var(--success)">●</span> <span>Responds instantly</span>';
+  });
+  
+  recognition.addEventListener('result', (event) => {
+    const transcript = event.results[0][0].transcript;
+    chatInput.value = transcript;
+    handleSend(transcript);
+  });
+  
+  recognition.addEventListener('error', (event) => {
+    console.warn('Speech recognition error:', event.error);
+    micBtn.classList.remove('mic-active');
+    showToast('Voice recognition error. Please try again.', 'error');
+  });
+  
+  return true;
+}
+
+micBtn.addEventListener('click', () => {
+  if (!initSpeech()) {
+    showToast('Voice input not supported in this browser', 'error');
+    return;
+  }
+  
+  if (isBotResponding) return;
+  
+  if (listening) {
+    recognition.stop();
+  } else {
+    try {
+      recognition.start();
+    } catch(e) {
+      console.warn('Speech start error:', e);
+    }
+  }
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (e.key === '/' && document.activeElement !== chatInput) {
+    e.preventDefault();
+    chatInput.focus();
+  }
+  
+  if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+    e.preventDefault();
+    themeToggle.click();
+  }
+});
+
+// Initialize on load
+window.addEventListener('load', () => {
+  const theme = localStorage.getItem('fc_theme') || 'light';
+  document.body.setAttribute('data-theme', theme);
+  themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+  
+  ttsEnabled = localStorage.getItem('fc_tts') === 'true';
+  ttsToggle.textContent = ttsEnabled ? '🔊' : '🔇';
+  ttsToggle.style.opacity = ttsEnabled ? '1' : '0.6';
+  
+  soundEnabled = localStorage.getItem('fc_sound') !== 'false';
+  userName = localStorage.getItem('fc_name') || '';
+  
+  setWelcome();
+  
+  const greet = getTimeGreeting();
+  const name = userName ? `, ${userName}` : '';
+  const greeting = `<strong>${greet}${name}! Welcome to First Choice! 🎉</strong>
+    <p style="margin-top:0.8rem">I'm your AI assistant, here to help you with:</p>
+    <ul style="margin:0.5rem 0;padding-left:1.5rem">
+      <li>Tent products & custom solutions</li>
+      <li>Aluminium fabrication services</li>
+      <li>Instant pricing estimates</li>
+      <li>Installation & delivery info</li>
+    </ul>
+    <p style="margin-top:0.8rem"><strong>💡 Tip:</strong> Click any quick action button or type your question!</p>`;
+  
+  appendMessage(greeting, 'bot');
+  
+  if (window.speechSynthesis) {
+    window.speechSynthesis.getVoices();
+  }
+  
+  chatInput.focus();
+});
+</script>
+</body>
+</html>
